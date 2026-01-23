@@ -6,8 +6,11 @@ import {
   updateProfile,
 } from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
+import { arcJetProtection } from "../middleware/arcjet.middleware.js";
 
 const router = express.Router();
+
+router.use(arcJetProtection);
 
 router.post("/signup", signup);
 router.post("/login", login);
