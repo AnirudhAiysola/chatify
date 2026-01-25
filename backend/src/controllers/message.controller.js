@@ -1,15 +1,18 @@
+import cloudinary from "../lib/cloudinary.js";
 import Message from "../models/Message.js";
 import User from "../models/User.js";
-import cloudinary from "../lib/cloudinary.js";
 
 export const getAllContacts = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;
-    const contacts = await User.find({ _id: { $ne: loggedInUserId } });
-    res.status(200).json(contacts);
+    const filteredUsers = await User.find({
+      _id: { $ne: loggedInUserId },
+    }).select("-password");
+
+    res.status(200).json(filteredUsers);
   } catch (error) {
-    console.log("Error in getAllContacts controller", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.log("Error in getAllContacts:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -67,10 +70,7 @@ export const sendMessage = async (req, res) => {
 
     await newMessage.save();
 
-    const receiverSocketId = getReceiverSocketId(receiverId);
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage", newMessage);
-    }
+    // todo: send message in real-time if user is online - socket.io
 
     res.status(201).json(newMessage);
   } catch (error) {
