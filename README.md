@@ -2,6 +2,7 @@
 
 A real-time messaging application built using Socket.IO and Node.js that enables low-latency, bi-directional communication between clients. The system focuses on performance, security, and backend reliability.
 
+## Production URL: https://chatify-h1m3z.sevalla.app/login
 
 ## Features
 
